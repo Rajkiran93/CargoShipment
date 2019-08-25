@@ -1,0 +1,1057 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import pandas as pd\n",
+    "import numpy as np\n",
+    "import matplotlib.pyplot as plt\n",
+    "import seaborn as sns\n",
+    "from sklearn.preprocessing import StandardScaler\n",
+    "%matplotlib inline"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "(9645, 107)\n"
+     ]
+    },
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>Unnamed: 0</th>\n",
+       "      <th>INDEX</th>\n",
+       "      <th>index</th>\n",
+       "      <th>SOU</th>\n",
+       "      <th>SIN</th>\n",
+       "      <th>NGB</th>\n",
+       "      <th>Direct Account Direct Account</th>\n",
+       "      <th>Forwarder General Forwarder</th>\n",
+       "      <th>DIRECT</th>\n",
+       "      <th>TRANSHIPMENT</th>\n",
+       "      <th>...</th>\n",
+       "      <th>TOTAL_ESTCOSTS_for_BL_EUR_MIN_BIN</th>\n",
+       "      <th>TOTAL_ESTCOSTS_for_BL_EUR_MEAN_BIN</th>\n",
+       "      <th>TOTAL_ESTPROFIT_for_BL_EUR_SUM_BIN</th>\n",
+       "      <th>TOTAL_ESTPROFIT_for_BL_EUR_MAX_BIN</th>\n",
+       "      <th>TOTAL_ESTPROFIT_for_BL_EUR_MIN_BIN</th>\n",
+       "      <th>TOTAL_ESTPROFIT_for_BL_EUR_MEAN_BIN</th>\n",
+       "      <th>TOTAL_ACTREVS_for_BL_SUM_BIN</th>\n",
+       "      <th>TOTAL_ACTREVS_for_BL_MAX_BIN</th>\n",
+       "      <th>TOTAL_ACTREVS_for_BL_MIN_BIN</th>\n",
+       "      <th>TOTAL_ACTREVS_for_BL_MEAN_BIN</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>瑞安市康拓进出口有限公司</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>1.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0-0.0</td>\n",
+       "      <td>0-26.92</td>\n",
+       "      <td>0-2.65</td>\n",
+       "      <td>0-13.62</td>\n",
+       "      <td>-6.0-6.04</td>\n",
+       "      <td>0-1.29</td>\n",
+       "      <td>0-388.96</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>1</td>\n",
+       "      <td>1</td>\n",
+       "      <td>MADEMAFRA MADEIRAS LTDA</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>...</td>\n",
+       "      <td>427.17-293281.5</td>\n",
+       "      <td>575.29-293281.5</td>\n",
+       "      <td>77.06-108.74</td>\n",
+       "      <td>80.05-101.87</td>\n",
+       "      <td>76.2-108.55</td>\n",
+       "      <td>78.17-105.33</td>\n",
+       "      <td>7383.01-14978.18</td>\n",
+       "      <td>7006.6-1022508.0</td>\n",
+       "      <td>3044.27-1022508.0</td>\n",
+       "      <td>4078.9-1022508.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>2</td>\n",
+       "      <td>2</td>\n",
+       "      <td>SAFRAN LANDING SYSTEMS</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0-0.0</td>\n",
+       "      <td>0-26.92</td>\n",
+       "      <td>28.95-51.71</td>\n",
+       "      <td>13.62-30.74</td>\n",
+       "      <td>19.55-34.93</td>\n",
+       "      <td>21.79-31.75</td>\n",
+       "      <td>0-388.96</td>\n",
+       "      <td>0-349.0</td>\n",
+       "      <td>23.18-106.0</td>\n",
+       "      <td>0-246.1</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>3</td>\n",
+       "      <td>3</td>\n",
+       "      <td>义乌市竹创玩具有限公司</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>1.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>...</td>\n",
+       "      <td>78.76-115.3</td>\n",
+       "      <td>98.64-127.23</td>\n",
+       "      <td>154.3-214.89</td>\n",
+       "      <td>132.35-172.24</td>\n",
+       "      <td>108.55-162.63</td>\n",
+       "      <td>141.33-200.23</td>\n",
+       "      <td>1639.93-2266.14</td>\n",
+       "      <td>1660.78-2144.37</td>\n",
+       "      <td>1893.82-3044.27</td>\n",
+       "      <td>1937.54-2602.89</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>4</td>\n",
+       "      <td>4</td>\n",
+       "      <td>广州市阿莎乐贸易有限公司</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>9</td>\n",
+       "      <td>9.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>9</td>\n",
+       "      <td>...</td>\n",
+       "      <td>427.17-293281.5</td>\n",
+       "      <td>575.29-293281.5</td>\n",
+       "      <td>697.16-1654.3</td>\n",
+       "      <td>429.54-14672.66</td>\n",
+       "      <td>76.2-108.55</td>\n",
+       "      <td>141.33-200.23</td>\n",
+       "      <td>39234.45-4155192.82</td>\n",
+       "      <td>7006.6-1022508.0</td>\n",
+       "      <td>3044.27-1022508.0</td>\n",
+       "      <td>4078.9-1022508.0</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "<p>5 rows × 107 columns</p>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "   Unnamed: 0  INDEX                     index  SOU  SIN  NGB  \\\n",
+       "0           0      0              瑞安市康拓进出口有限公司    0    0    1   \n",
+       "1           1      1   MADEMAFRA MADEIRAS LTDA    0    0    0   \n",
+       "2           2      2    SAFRAN LANDING SYSTEMS    0    1    0   \n",
+       "3           3      3               义乌市竹创玩具有限公司    0    0    1   \n",
+       "4           4      4             广州市阿莎乐贸易有限公司     0    0    9   \n",
+       "\n",
+       "   Direct Account Direct Account  Forwarder General Forwarder  DIRECT  \\\n",
+       "0                            1.0                          0.0       0   \n",
+       "1                            1.0                          0.0       0   \n",
+       "2                            1.0                          0.0       0   \n",
+       "3                            1.0                          0.0       0   \n",
+       "4                            9.0                          0.0       0   \n",
+       "\n",
+       "   TRANSHIPMENT              ...                \\\n",
+       "0             1              ...                 \n",
+       "1             1              ...                 \n",
+       "2             1              ...                 \n",
+       "3             1              ...                 \n",
+       "4             9              ...                 \n",
+       "\n",
+       "   TOTAL_ESTCOSTS_for_BL_EUR_MIN_BIN  TOTAL_ESTCOSTS_for_BL_EUR_MEAN_BIN  \\\n",
+       "0                              0-0.0                             0-26.92   \n",
+       "1                    427.17-293281.5                     575.29-293281.5   \n",
+       "2                              0-0.0                             0-26.92   \n",
+       "3                        78.76-115.3                        98.64-127.23   \n",
+       "4                    427.17-293281.5                     575.29-293281.5   \n",
+       "\n",
+       "   TOTAL_ESTPROFIT_for_BL_EUR_SUM_BIN  TOTAL_ESTPROFIT_for_BL_EUR_MAX_BIN  \\\n",
+       "0                              0-2.65                             0-13.62   \n",
+       "1                        77.06-108.74                        80.05-101.87   \n",
+       "2                         28.95-51.71                         13.62-30.74   \n",
+       "3                        154.3-214.89                       132.35-172.24   \n",
+       "4                       697.16-1654.3                     429.54-14672.66   \n",
+       "\n",
+       "   TOTAL_ESTPROFIT_for_BL_EUR_MIN_BIN  TOTAL_ESTPROFIT_for_BL_EUR_MEAN_BIN  \\\n",
+       "0                           -6.0-6.04                               0-1.29   \n",
+       "1                         76.2-108.55                         78.17-105.33   \n",
+       "2                         19.55-34.93                          21.79-31.75   \n",
+       "3                       108.55-162.63                        141.33-200.23   \n",
+       "4                         76.2-108.55                        141.33-200.23   \n",
+       "\n",
+       "   TOTAL_ACTREVS_for_BL_SUM_BIN  TOTAL_ACTREVS_for_BL_MAX_BIN  \\\n",
+       "0                      0-388.96                             0   \n",
+       "1              7383.01-14978.18              7006.6-1022508.0   \n",
+       "2                      0-388.96                       0-349.0   \n",
+       "3               1639.93-2266.14               1660.78-2144.37   \n",
+       "4           39234.45-4155192.82              7006.6-1022508.0   \n",
+       "\n",
+       "   TOTAL_ACTREVS_for_BL_MIN_BIN  TOTAL_ACTREVS_for_BL_MEAN_BIN  \n",
+       "0                             0                              0  \n",
+       "1             3044.27-1022508.0               4078.9-1022508.0  \n",
+       "2                   23.18-106.0                        0-246.1  \n",
+       "3               1893.82-3044.27                1937.54-2602.89  \n",
+       "4             3044.27-1022508.0               4078.9-1022508.0  \n",
+       "\n",
+       "[5 rows x 107 columns]"
+      ]
+     },
+     "execution_count": 4,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df = pd.read_excel('Sample.xlsx')\n",
+    "print(df.shape)\n",
+    "df.head(5)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "Index(['Unnamed: 0', 'INDEX', 'index', 'SOU', 'SIN', 'NGB',\n",
+       "       'Direct Account Direct Account', 'Forwarder General Forwarder',\n",
+       "       'DIRECT', 'TRANSHIPMENT',\n",
+       "       ...\n",
+       "       'TOTAL_ESTCOSTS_for_BL_EUR_MIN_BIN',\n",
+       "       'TOTAL_ESTCOSTS_for_BL_EUR_MEAN_BIN',\n",
+       "       'TOTAL_ESTPROFIT_for_BL_EUR_SUM_BIN',\n",
+       "       'TOTAL_ESTPROFIT_for_BL_EUR_MAX_BIN',\n",
+       "       'TOTAL_ESTPROFIT_for_BL_EUR_MIN_BIN',\n",
+       "       'TOTAL_ESTPROFIT_for_BL_EUR_MEAN_BIN', 'TOTAL_ACTREVS_for_BL_SUM_BIN',\n",
+       "       'TOTAL_ACTREVS_for_BL_MAX_BIN', 'TOTAL_ACTREVS_for_BL_MIN_BIN',\n",
+       "       'TOTAL_ACTREVS_for_BL_MEAN_BIN'],\n",
+       "      dtype='object', length=107)"
+      ]
+     },
+     "execution_count": 5,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df.columns "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "y = df[\"TOTAL_ESTPROFIT_for_BL_EUR_SUM\"]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "count    9.645000e+03\n",
+       "mean     7.153597e+02\n",
+       "std      1.446811e+04\n",
+       "min     -1.323170e+06\n",
+       "25%      5.196955e+01\n",
+       "50%      1.550806e+02\n",
+       "75%      4.250630e+02\n",
+       "max      2.457174e+05\n",
+       "Name: TOTAL_ESTPROFIT_for_BL_EUR_SUM, dtype: float64"
+      ]
+     },
+     "execution_count": 7,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "y.describe()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "705"
+      ]
+     },
+     "execution_count": 8,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "(y<0).sum()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "<matplotlib.axes._subplots.AxesSubplot at 0x1a19c9aba8>"
+      ]
+     },
+     "execution_count": 9,
+     "metadata": {},
+     "output_type": "execute_result"
+    },
+    {
+     "data": {
+      "image/png": "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\n",
+      "text/plain": [
+       "<Figure size 432x288 with 1 Axes>"
+      ]
+     },
+     "metadata": {
+      "needs_background": "light"
+     },
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "sns.boxplot(y)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "df.drop(df.loc[:, 'Unnamed: 0':'20 GP'].columns, inplace = True, axis = 1)\n",
+    "df.drop(df.loc[:, 'P':'TOTAL_ACTREVS_for_BL_MEAN_BIN'].columns, inplace = True, axis = 1) \n",
+    "\n",
+    "# df.drop(['LCL', 'FCL', 'I', 'E', '40 HC', '20 GP'], inplace = True, axis = 1) \n",
+    "# df.drop(df.loc[:, 'Unnamed: 0':'Forwarder General Forwarder'].columns, inplace = True, axis = 1)\n",
+    "# df.drop(df.loc[:, 'P':'TOTAL_ACTREVS_for_BL_MEAN_BIN'].columns, inplace = True, axis = 1) "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "(9645, 14)\n"
+     ]
+    },
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>FAR EAST_BL_POL_REGION</th>\n",
+       "      <th>EUROPE_BL_POL_REGION</th>\n",
+       "      <th>SINGAPORE_BL_POL_COUNTRY</th>\n",
+       "      <th>UNITED KINGDOM_BL_POL_COUNTRY</th>\n",
+       "      <th>CHINA_BL_POL_COUNTRY</th>\n",
+       "      <th>U.S.A._BL_POL_COUNTRY</th>\n",
+       "      <th>CHINA-NINGBO_BL_POL_COUNTRY</th>\n",
+       "      <th>UNITED KINGDOM_BL_POD_COUNTRY</th>\n",
+       "      <th>U.S.A._BL_POD_COUNTRY</th>\n",
+       "      <th>INDIA_BL_POD_COUNTRY</th>\n",
+       "      <th>SINGAPORE_BL_POD_COUNTRY</th>\n",
+       "      <th>FAR EAST_BL_POD_REGION</th>\n",
+       "      <th>INDIAN SUB CONTINENT_BL_POD_REGION</th>\n",
+       "      <th>EUROPE_BL_POD_REGION</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>9</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>9</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "   FAR EAST_BL_POL_REGION  EUROPE_BL_POL_REGION  SINGAPORE_BL_POL_COUNTRY  \\\n",
+       "0                       1                     0                         0   \n",
+       "1                       0                     0                         0   \n",
+       "2                       1                     0                         1   \n",
+       "3                       1                     0                         0   \n",
+       "4                       9                     0                         0   \n",
+       "\n",
+       "   UNITED KINGDOM_BL_POL_COUNTRY  CHINA_BL_POL_COUNTRY  U.S.A._BL_POL_COUNTRY  \\\n",
+       "0                              0                     0                      0   \n",
+       "1                              0                     0                      0   \n",
+       "2                              0                     0                      0   \n",
+       "3                              0                     0                      0   \n",
+       "4                              0                     0                      0   \n",
+       "\n",
+       "   CHINA-NINGBO_BL_POL_COUNTRY  UNITED KINGDOM_BL_POD_COUNTRY  \\\n",
+       "0                            1                              0   \n",
+       "1                            0                              0   \n",
+       "2                            0                              0   \n",
+       "3                            1                              0   \n",
+       "4                            9                              0   \n",
+       "\n",
+       "   U.S.A._BL_POD_COUNTRY  INDIA_BL_POD_COUNTRY  SINGAPORE_BL_POD_COUNTRY  \\\n",
+       "0                      1                     0                         0   \n",
+       "1                      0                     0                         0   \n",
+       "2                      0                     0                         0   \n",
+       "3                      0                     0                         0   \n",
+       "4                      0                     0                         0   \n",
+       "\n",
+       "   FAR EAST_BL_POD_REGION  INDIAN SUB CONTINENT_BL_POD_REGION  \\\n",
+       "0                       0                                   0   \n",
+       "1                       1                                   0   \n",
+       "2                       1                                   0   \n",
+       "3                       0                                   0   \n",
+       "4                       0                                   0   \n",
+       "\n",
+       "   EUROPE_BL_POD_REGION  \n",
+       "0                     0  \n",
+       "1                     0  \n",
+       "2                     0  \n",
+       "3                     0  \n",
+       "4                     0  "
+      ]
+     },
+     "execution_count": 12,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "print(df.shape)\n",
+    "df.head(5)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "FAR EAST_BL_POL_REGION                0\n",
+       "EUROPE_BL_POL_REGION                  0\n",
+       "SINGAPORE_BL_POL_COUNTRY              0\n",
+       "UNITED KINGDOM_BL_POL_COUNTRY         0\n",
+       "CHINA_BL_POL_COUNTRY                  0\n",
+       "U.S.A._BL_POL_COUNTRY                 0\n",
+       "CHINA-NINGBO_BL_POL_COUNTRY           0\n",
+       "UNITED KINGDOM_BL_POD_COUNTRY         0\n",
+       "U.S.A._BL_POD_COUNTRY                 0\n",
+       "INDIA_BL_POD_COUNTRY                  0\n",
+       "SINGAPORE_BL_POD_COUNTRY              0\n",
+       "FAR EAST_BL_POD_REGION                0\n",
+       "INDIAN SUB CONTINENT_BL_POD_REGION    0\n",
+       "EUROPE_BL_POD_REGION                  0\n",
+       "dtype: int64"
+      ]
+     },
+     "execution_count": 14,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df.isna().sum()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "df = pd.DataFrame(df)\n",
+    "df = df.fillna(0)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>FAR EAST_BL_POL_REGION</th>\n",
+       "      <th>EUROPE_BL_POL_REGION</th>\n",
+       "      <th>SINGAPORE_BL_POL_COUNTRY</th>\n",
+       "      <th>UNITED KINGDOM_BL_POL_COUNTRY</th>\n",
+       "      <th>CHINA_BL_POL_COUNTRY</th>\n",
+       "      <th>U.S.A._BL_POL_COUNTRY</th>\n",
+       "      <th>CHINA-NINGBO_BL_POL_COUNTRY</th>\n",
+       "      <th>UNITED KINGDOM_BL_POD_COUNTRY</th>\n",
+       "      <th>U.S.A._BL_POD_COUNTRY</th>\n",
+       "      <th>INDIA_BL_POD_COUNTRY</th>\n",
+       "      <th>SINGAPORE_BL_POD_COUNTRY</th>\n",
+       "      <th>FAR EAST_BL_POD_REGION</th>\n",
+       "      <th>INDIAN SUB CONTINENT_BL_POD_REGION</th>\n",
+       "      <th>EUROPE_BL_POD_REGION</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>9</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>9</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "   FAR EAST_BL_POL_REGION  EUROPE_BL_POL_REGION  SINGAPORE_BL_POL_COUNTRY  \\\n",
+       "0                       1                     0                         0   \n",
+       "1                       0                     0                         0   \n",
+       "2                       1                     0                         1   \n",
+       "3                       1                     0                         0   \n",
+       "4                       9                     0                         0   \n",
+       "\n",
+       "   UNITED KINGDOM_BL_POL_COUNTRY  CHINA_BL_POL_COUNTRY  U.S.A._BL_POL_COUNTRY  \\\n",
+       "0                              0                     0                      0   \n",
+       "1                              0                     0                      0   \n",
+       "2                              0                     0                      0   \n",
+       "3                              0                     0                      0   \n",
+       "4                              0                     0                      0   \n",
+       "\n",
+       "   CHINA-NINGBO_BL_POL_COUNTRY  UNITED KINGDOM_BL_POD_COUNTRY  \\\n",
+       "0                            1                              0   \n",
+       "1                            0                              0   \n",
+       "2                            0                              0   \n",
+       "3                            1                              0   \n",
+       "4                            9                              0   \n",
+       "\n",
+       "   U.S.A._BL_POD_COUNTRY  INDIA_BL_POD_COUNTRY  SINGAPORE_BL_POD_COUNTRY  \\\n",
+       "0                      1                     0                         0   \n",
+       "1                      0                     0                         0   \n",
+       "2                      0                     0                         0   \n",
+       "3                      0                     0                         0   \n",
+       "4                      0                     0                         0   \n",
+       "\n",
+       "   FAR EAST_BL_POD_REGION  INDIAN SUB CONTINENT_BL_POD_REGION  \\\n",
+       "0                       0                                   0   \n",
+       "1                       1                                   0   \n",
+       "2                       1                                   0   \n",
+       "3                       0                                   0   \n",
+       "4                       0                                   0   \n",
+       "\n",
+       "   EUROPE_BL_POD_REGION  \n",
+       "0                     0  \n",
+       "1                     0  \n",
+       "2                     0  \n",
+       "3                     0  \n",
+       "4                     0  "
+      ]
+     },
+     "execution_count": 16,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "export_excel = df.to_excel (r'ExtractedFeatures.xlsx', index = None, header=True)\n",
+    "df = pd.read_excel('ExtractedFeatures.xlsx')\n",
+    "df.head(5)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 68,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# #Using the elbow method to find the optimum number of clusters\n",
+    "# from sklearn.cluster import KMeans\n",
+    "# wcss = []\n",
+    "# for i in range(1,12):\n",
+    "#     km=KMeans(n_clusters=i,init='k-means++', max_iter=1000, n_init=10, random_state=0)\n",
+    "#     km.fit(df)\n",
+    "#     wcss.append(km.inertia_)\n",
+    "# plt.plot(range(1,12),wcss)\n",
+    "# plt.title('Elbow Method')\n",
+    "# plt.xlabel('Number of clusters')\n",
+    "# plt.ylabel('wcss')\n",
+    "# plt.show()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 69,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# ##Fitting kmeans to the dataset with k=?\n",
+    "# km=KMeans(n_clusters=3,init='k-means++', max_iter=1000, n_init=10, random_state=0)\n",
+    "# y_means = km.fit_predict(df)\n",
+    "\n",
+    "# km.cluster_centers_"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 70,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "\n",
+    "# # Visualizing the clusters for k=6\n",
+    "# plt.figure(figsize=(20,20))\n",
+    "# plt.scatter(df[y_means==0],df[y_means==0],s=30, c='purple',label='Cluster1')\n",
+    "# plt.scatter(df[y_means==1],df[y_means==1],s=30, c='blue',label='Cluster2')\n",
+    "# plt.scatter(df[y_means==2],df[y_means==2],s=30, c='green',label='Cluster3')\n",
+    "# # plt.scatter(df[y_means==3],df[y_means==3],s=30, c='cyan',label='Cluster4')\n",
+    "# # plt.scatter(df[y_means==4],df[y_means==4],s=30, c='red',label='Cluster5')\n",
+    "# # plt.scatter(df[y_means==5],df[y_means==5],s=30, c='brown',label='Cluster6')\n",
+    "# # plt.scatter(df[y_means==6],df[y_means==6],s=30, c='yellow',label='Cluster7')\n",
+    "# # plt.scatter(df[y_means==7],df[y_means==7],s=30, c='brown',label='Cluster8')\n",
+    "# plt.scatter(km.cluster_centers_[:,0], km.cluster_centers_[:,1],s=10,marker='s', c='black', alpha=0.7, label='Centroids')\n",
+    "# plt.title('Transitions segments')\n",
+    "# plt.legend()\n",
+    "# plt.show()\n",
+    "\n",
+    "\n",
+    "\n",
+    "# # # Visualizing the clusters for k=6\n",
+    "# # plt.scatter(df[y_means==0,0],df[y_means==0,1],s=50, c='purple',label='Cluster1')\n",
+    "# # plt.scatter(df[y_means==1,0],df[y_means==1,1],s=50, c='blue',label='Cluster2')\n",
+    "# # plt.scatter(df[y_means==2,0],df[y_means==2,1],s=50, c='green',label='Cluster3')\n",
+    "# # plt.scatter(df[y_means==3,0],df[y_means==3,1],s=50, c='cyan',label='Cluster4')\n",
+    "# # plt.scatter(df[y_means==4,0],df[y_means==4,1],s=50, c='red',label='Cluster5')\n",
+    "# # plt.scatter(df[y_means==5,0],df[y_means==5,1],s=50, c='brown',label='Cluster6')\n",
+    "# # plt.scatter(km.cluster_centers_[:,0], km.cluster_centers_[:,1],s=300,marker='s', c='black', alpha=0.7, label='Centroids')\n",
+    "# # plt.title('Transitions segments')\n",
+    "# # plt.legend()\n",
+    "# # plt.show()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 17,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "X = df.values.copy()\n",
+    "# scale = StandardScaler()\n",
+    "# X = scale.fit_transform(df)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Applying PCA"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Since data is in 14 dimension, we bring it to 2 dimension using PCA which will be easy to draw and cluster."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 26,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from sklearn.cluster import KMeans\n",
+    "from sklearn.decomposition import PCA\n",
+    "pca = PCA(n_components=2).fit(X)\n",
+    "pca_2d = pca.transform(X)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The data in 2 dimension encoded by PCA can then be passed to K-Mean with 3 clusters."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 30,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "kmeans = KMeans(n_clusters=3)\n",
+    "cluster_found = kmeans.fit_predict(pca_2d)\n",
+    "cluster_found_sr = pd.Series(cluster_found, name='cluster')\n",
+    "df_uci_pivot = df.set_index(cluster_found_sr, append=True )\n",
+    "cluster_values = sorted(df_uci_pivot.index.get_level_values('cluster').unique())\n",
+    "color_list = ['blue','red','green']"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 31,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from sklearn.manifold import TSNE\n",
+    "import matplotlib.colors\n",
+    "\n",
+    "# import matplotlib.colors as matplotlib\n",
+    "\n",
+    "# from sklearn.manifold import TSNE\n",
+    "# import matplotlib.colors\n",
+    "\n",
+    "# tsne = TSNE()\n",
+    "# results_tsne = tsne.fit_transform(X)\n",
+    "\n",
+    "cmap = matplotlib.colors.LinearSegmentedColormap.from_list(cluster_values, color_list)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 82,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# plt.scatter(results_tsne[:,0], results_tsne[:,1],\n",
+    "#     c=df_uci_pivot.index.get_level_values('cluster'),\n",
+    "#     cmap=cmap, \n",
+    "#     alpha=0.5, \n",
+    "#     )"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 32,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "<matplotlib.collections.PathCollection at 0x1a18a26c18>"
+      ]
+     },
+     "execution_count": 32,
+     "metadata": {},
+     "output_type": "execute_result"
+    },
+    {
+     "data": {
+      "image/png": "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\n",
+      "text/plain": [
+       "<Figure size 432x288 with 1 Axes>"
+      ]
+     },
+     "metadata": {
+      "needs_background": "light"
+     },
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "plt.scatter(pca_2d[:,0], pca_2d[:,1],\n",
+    "    c=df_uci_pivot.index.get_level_values('cluster'),\n",
+    "    cmap=cmap, \n",
+    "    alpha=0.5, \n",
+    "    )"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.2"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
